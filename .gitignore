@@ -25,6 +25,7 @@ buildNumber.properties
 ### Vaadin / Frontend ###
 node_modules/
 node/
+src/main/bundles/
 pnpm-lock.yaml
 .pnpm-store/
 src/main/frontend/generated/

@@ -107,6 +107,8 @@ class AppTest {
                 contains("setAttribute('aria-live', 'polite')"), eq(Inline.Wrapping.JAVASCRIPT));
         verify(settings).addInlineWithContents(eq(Inline.Position.PREPEND),
                 contains("setAttribute('aria-atomic', 'true')"), eq(Inline.Wrapping.JAVASCRIPT));
+        verify(settings).addInlineWithContents(eq(Inline.Position.PREPEND),
+                contains("Pengumuman aplikasi"), eq(Inline.Wrapping.JAVASCRIPT));
         verify(settings).addInlineWithContents(eq(Inline.Position.APPEND),
                 contains("cashflow-shell-fallback"), eq(Inline.Wrapping.JAVASCRIPT));
     }
