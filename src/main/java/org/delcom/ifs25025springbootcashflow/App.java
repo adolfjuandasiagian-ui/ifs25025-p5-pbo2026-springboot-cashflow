@@ -22,7 +22,21 @@ public class App implements AppShellConfigurator {
         settings.addMetaTag("description",
                 "Catat pemasukan dan pengeluaran, kelola transaksi, dan pantau saldo keuangan pribadi Anda.");
         settings.addInlineWithContents(Inline.Position.PREPEND,
-                "document.documentElement.lang = 'id';", Inline.Wrapping.JAVASCRIPT);
+                "document.documentElement.lang = 'id';"
+                        + "const setConnectionStatusRole = () => {"
+                        + "  const indicator = document.querySelector('vaadin-connection-indicator');"
+                        + "  if (!indicator) return false;"
+                        + "  indicator.setAttribute('role', 'status');"
+                        + "  indicator.setAttribute('aria-label', 'Status koneksi aplikasi');"
+                        + "  return true;"
+                        + "};"
+                        + "if (!setConnectionStatusRole()) {"
+                        + "  const observer = new MutationObserver(() => {"
+                        + "    if (setConnectionStatusRole()) observer.disconnect();"
+                        + "  });"
+                        + "  observer.observe(document.documentElement, { childList: true, subtree: true });"
+                        + "}",
+                Inline.Wrapping.JAVASCRIPT);
     }
 
     public static void main(String[] args) throws Exception {

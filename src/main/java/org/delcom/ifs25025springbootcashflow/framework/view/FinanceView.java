@@ -16,7 +16,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -74,7 +74,7 @@ public class FinanceView extends VerticalLayout {
 
         configureToolbar();
         statusLabel.addClassName("status-label");
-        add(new H2("Transaksi Keuangan"), summary, new PageCard(buildToolbar(), statusLabel, grid));
+        add(new H1("Transaksi Keuangan"), summary, new PageCard(buildToolbar(), statusLabel, grid));
     }
 
     @Override

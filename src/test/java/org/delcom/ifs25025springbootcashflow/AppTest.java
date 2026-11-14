@@ -14,11 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import com.vaadin.flow.component.page.Inline;
+import com.vaadin.flow.server.AppShellSettings;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
 
 /** Smoke test: konteks Spring (profil test, H2) naik dan seluruh bean Clean Architecture terpasang. */
 @SpringBootTest
@@ -68,5 +74,17 @@ class AppTest {
             App.main(new String[]{});
             spring.verify(() -> SpringApplication.run(any(Class.class), any(String[].class)));
         }
+    }
+
+    @Test
+    void configuresAccessiblePageMetadata() {
+        AppShellSettings settings = mock(AppShellSettings.class);
+
+        new App().configurePage(settings);
+
+        verify(settings).setPageTitle("Cashflow | Catatan Keuangan Pribadi");
+        verify(settings).addMetaTag(eq("description"), contains("Catat pemasukan dan pengeluaran"));
+        verify(settings).addInlineWithContents(eq(Inline.Position.PREPEND),
+                contains("role', 'status'"), eq(Inline.Wrapping.JAVASCRIPT));
     }
 }

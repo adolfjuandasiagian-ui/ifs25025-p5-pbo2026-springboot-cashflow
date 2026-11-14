@@ -12,7 +12,7 @@ import org.delcom.ifs25025springbootcashflow.usecase.UserUseCase;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -41,7 +41,7 @@ public class UserTransactionsView extends VerticalLayout implements BeforeEnterO
     private final IUserRepository userRepository;
     private final FinancePresenter presenter;
 
-    private final H2 heading = new H2("Transaksi Pengguna");
+    private final H1 heading = new H1("Transaksi Pengguna");
     private final SummaryCards summary = new SummaryCards();
     private final TextField searchField = new TextField();
     private final Select<SortOption> sortSelect = new Select<>();

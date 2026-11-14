@@ -9,7 +9,6 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -36,7 +35,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
 
         setPrimarySection(Section.DRAWER);
 
-        H1 title = new H1("Cashflow");
+        Span title = new Span("Cashflow");
         title.addClassName("app-title");
 
         Span spacer = new Span();

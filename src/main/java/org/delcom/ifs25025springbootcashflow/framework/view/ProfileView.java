@@ -14,7 +14,7 @@ import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -81,7 +81,7 @@ public class ProfileView extends VerticalLayout {
                 new HorizontalLayout(avatarSlot, photoBox),
                 username, role, fullName, newPassword, confirm, progress, saveButton);
         card.setMaxWidth("640px");
-        add(new H2("Profil Saya"), card);
+        add(new H1("Profil Saya"), card);
     }
 
     @Override

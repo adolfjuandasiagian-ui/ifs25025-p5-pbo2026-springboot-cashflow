@@ -10,7 +10,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -43,7 +43,7 @@ public class UsersView extends VerticalLayout implements BeforeEnterObserver {
         setPadding(true);
         setSpacing(true);
         configureGrid();
-        add(new H2("Daftar Pengguna"), new PageCard(grid));
+        add(new H1("Daftar Pengguna"), new PageCard(grid));
     }
 
     private void configureGrid() {
