@@ -8,7 +8,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -16,6 +16,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -53,6 +54,11 @@ public class RegisterView extends VerticalLayout implements BeforeEnterObserver 
         password.setHelperText("Minimal 6 karakter");
         confirm.setWidthFull();
 
+        fullName.setValueChangeMode(ValueChangeMode.EAGER);
+        username.setValueChangeMode(ValueChangeMode.EAGER);
+        password.setValueChangeMode(ValueChangeMode.EAGER);
+        confirm.setValueChangeMode(ValueChangeMode.EAGER);
+
         registerButton.setWidthFull();
         registerButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         registerButton.addClickListener(e -> submit());
@@ -60,8 +66,9 @@ public class RegisterView extends VerticalLayout implements BeforeEnterObserver 
         progress.setIndeterminate(true);
         progress.setVisible(false);
 
-        H2 title = new H2("Buat Akun");
+        H1 title = new H1("Buat Akun");
         title.addClassName("auth-title");
+        title.getStyle().set("font-size", "1.5rem");
         Paragraph subtitle = new Paragraph("Daftar untuk mulai mencatat pemasukan dan pengeluaran.");
         subtitle.addClassName("auth-subtitle");
 

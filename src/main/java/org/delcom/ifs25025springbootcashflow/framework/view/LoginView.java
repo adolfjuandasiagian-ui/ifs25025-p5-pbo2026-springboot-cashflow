@@ -10,7 +10,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -46,28 +46,32 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         setAlignItems(FlexComponent.Alignment.CENTER);
         setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-        username.setId("login-username");
+        // ID dipasang pada <input> di dalam komponen (bukan elemen pembungkus) agar bisa
+        // dipilih oleh pengujian/otomasi: #login-username dan #login-password.
+        setInnerInputId(username, "login-username");
         username.setWidthFull();
         username.setAutofocus(true);
-        // EAGER: nilai dikirim ke server pada setiap ketikan (tidak menunggu field kehilangan
-        // fokus), agar login tetap andal saat diisi cepat oleh alat pengujian otomatis.
-        username.setValueChangeMode(ValueChangeMode.EAGER);
-
-        password.setId("login-password");
+        setInnerInputId(password, "login-password");
         password.setWidthFull();
+
+        // EAGER: nilai langsung dikirim ke server setiap ketikan, sehingga saat tombol
+        // diklik / Enter ditekan, server sudah memegang username & password terbaru.
+        username.setValueChangeMode(ValueChangeMode.EAGER);
         password.setValueChangeMode(ValueChangeMode.EAGER);
 
         loginButton.setId("login-submit");
         loginButton.setWidthFull();
         loginButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        loginButton.addClickShortcut(Key.ENTER);
         loginButton.addClickListener(e -> submit());
+        username.addKeyUpListener(Key.ENTER, e -> submit());
+        password.addKeyUpListener(Key.ENTER, e -> submit());
 
         progress.setIndeterminate(true);
         progress.setVisible(false);
 
-        H2 title = new H2("Cashflow");
+        H1 title = new H1("Cashflow");
         title.addClassName("auth-title");
+        title.getStyle().set("font-size", "1.5rem");
         Paragraph subtitle = new Paragraph("Masuk untuk mengelola catatan keuangan Anda.");
         subtitle.addClassName("auth-subtitle");
 
@@ -102,5 +106,27 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         if (AuthSession.currentUser(userRepository) != null) {
             event.forwardTo(FinanceView.class);
         }
+    }
+
+    /** Memasang id pada elemen <input> di dalam komponen field Vaadin. */
+    private void setInnerInputId(com.vaadin.flow.component.Component component, String id) {
+        Runnable apply = () -> component.getElement().executeJs(
+                "const applyId = () => {"
+                        + "  const input = this.inputElement || this.querySelector('input');"
+                        + "  if (input) {"
+                        + "    input.id = $0;"
+                        + "    const label = this.querySelector('label');"
+                        + "    if (label) label.setAttribute('for', $0);"
+                        + "    return true;"
+                        + "  }"
+                        + "  return false;"
+                        + "};"
+                        + "if (!applyId()) {"
+                        + "  if (this.updateComplete) { this.updateComplete.then(applyId); }"
+                        + "  const obs = new MutationObserver(() => { if (applyId()) obs.disconnect(); });"
+                        + "  obs.observe(this, { childList: true, subtree: true });"
+                        + "}", id);
+        apply.run();
+        component.addAttachListener(event -> apply.run());
     }
 }
