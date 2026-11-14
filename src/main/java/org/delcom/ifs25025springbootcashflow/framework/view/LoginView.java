@@ -17,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -48,8 +49,13 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         username.setId("login-username");
         username.setWidthFull();
         username.setAutofocus(true);
+        // EAGER: nilai dikirim ke server pada setiap ketikan (tidak menunggu field kehilangan
+        // fokus), agar login tetap andal saat diisi cepat oleh alat pengujian otomatis.
+        username.setValueChangeMode(ValueChangeMode.EAGER);
+
         password.setId("login-password");
         password.setWidthFull();
+        password.setValueChangeMode(ValueChangeMode.EAGER);
 
         loginButton.setId("login-submit");
         loginButton.setWidthFull();
