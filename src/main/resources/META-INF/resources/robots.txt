@@ -4,3 +4,4 @@ Allow: /register
 Disallow: /profile
 Disallow: /users
 Disallow: /user-transactions
+Sitemap: https://ifs25025-p5-pbo2026-springboot-cashflow.onrender.com/sitemap.xml

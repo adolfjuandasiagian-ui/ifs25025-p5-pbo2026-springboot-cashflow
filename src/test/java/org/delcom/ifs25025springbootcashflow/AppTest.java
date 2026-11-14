@@ -18,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
 import java.net.URI;
+import java.time.Duration;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -108,9 +109,20 @@ class AppTest {
     @Test
     void servesAccessibleFallbackInInitialPageShell() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder(
-                URI.create("http://localhost:" + port + "/login")).GET().build();
-        HttpResponse<String> response =
-                HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+                URI.create("http://localhost:" + port + "/login"))
+                .timeout(Duration.ofSeconds(5))
+                .GET()
+                .build();
+        HttpClient client = HttpClient.newHttpClient();
+        long deadline = System.nanoTime() + Duration.ofSeconds(60).toNanos();
+        HttpResponse<String> response;
+        do {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.body().contains("<main id=\"cashflow-shell-fallback\"")) {
+                break;
+            }
+            Thread.sleep(200);
+        } while (System.nanoTime() < deadline);
 
         assertEquals(200, response.statusCode());
         assertTrue(response.body().contains("<main id=\"cashflow-shell-fallback\""));
@@ -130,5 +142,25 @@ class AppTest {
         assertTrue(response.body().contains("User-agent: *"));
         assertTrue(response.body().contains("Allow: /login"));
         assertTrue(response.body().contains("Disallow: /users"));
+        assertTrue(response.body().contains(
+                "Sitemap: https://ifs25025-p5-pbo2026-springboot-cashflow.onrender.com/sitemap.xml"));
+    }
+
+    @Test
+    void servesSitemapForPublicRoutesAsXml() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder(
+                URI.create("http://localhost:" + port + "/sitemap.xml")).GET().build();
+        HttpResponse<String> response =
+                HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(200, response.statusCode());
+        assertTrue(response.headers().firstValue("Content-Type").orElse("")
+                .contains("xml"));
+        assertTrue(response.body().contains("<urlset"));
+        assertTrue(response.body().contains(
+                "https://ifs25025-p5-pbo2026-springboot-cashflow.onrender.com/login"));
+        assertTrue(response.body().contains(
+                "https://ifs25025-p5-pbo2026-springboot-cashflow.onrender.com/register"));
+        assertTrue(response.body().contains("</urlset>"));
     }
 }

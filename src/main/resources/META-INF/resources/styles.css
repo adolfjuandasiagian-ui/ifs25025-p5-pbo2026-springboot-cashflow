@@ -6,8 +6,8 @@ html {
     --lumo-primary-text-color: #2563EB;
     --lumo-primary-color-50pct: rgba(37, 99, 235, 0.5);
     --lumo-primary-color-10pct: rgba(37, 99, 235, 0.1);
-    --lumo-success-color: #16A34A;
-    --lumo-error-color: #DC2626;
+    --lumo-success-color: #15803D;
+    --lumo-error-color: #B91C1C;
 }
 
 body {
@@ -77,7 +77,7 @@ vaadin-dialog-overlay::part(footer) {
 
 .dialog-badge {
     display: inline-block;
-    background: rgba(255, 255, 255, 0.22);
+    background: rgba(0, 0, 0, 0.18);
     color: #FFFFFF;
     border-radius: 999px;
     padding: 0.1rem 0.7rem;
@@ -142,7 +142,7 @@ vaadin-dialog-overlay::part(footer) {
 
 .user-role {
     font-size: 0.75rem;
-    color: #6B7280;
+    color: #4B5563;
 }
 
 @media (max-width: 600px) {
@@ -161,7 +161,7 @@ vaadin-dialog-overlay::part(footer) {
 }
 
 .status-label {
-    color: #6B7280;
+    color: #4B5563;
     font-size: 0.875rem;
 }
 
@@ -191,6 +191,6 @@ vaadin-dialog-overlay::part(footer) {
 
 .auth-subtitle {
     margin: 0;
-    color: #6B7280;
+    color: #4B5563;
     font-size: 0.9rem;
 }
