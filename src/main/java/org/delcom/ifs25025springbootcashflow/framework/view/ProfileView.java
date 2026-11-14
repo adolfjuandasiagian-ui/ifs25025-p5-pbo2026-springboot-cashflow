@@ -54,6 +54,7 @@ public class ProfileView extends VerticalLayout {
         this.userRepository = userRepository;
         this.fileStorage = fileStorage;
 
+        getElement().setAttribute("role", "main");
         setPadding(true);
         setSpacing(true);
 

@@ -42,6 +42,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         this.userRepository = userRepository;
 
         addClassName("auth-page");
+        getElement().setAttribute("role", "main");
         setSizeFull();
         setAlignItems(FlexComponent.Alignment.CENTER);
         setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);

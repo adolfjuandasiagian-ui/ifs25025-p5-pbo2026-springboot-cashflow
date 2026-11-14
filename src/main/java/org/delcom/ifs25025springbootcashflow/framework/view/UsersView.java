@@ -39,6 +39,7 @@ public class UsersView extends VerticalLayout implements BeforeEnterObserver {
         this.userRepository = userRepository;
         this.presenter = presenter;
 
+        getElement().setAttribute("role", "main");
         setPadding(true);
         setSpacing(true);
         configureGrid();
