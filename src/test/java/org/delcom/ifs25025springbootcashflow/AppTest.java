@@ -116,4 +116,19 @@ class AppTest {
         assertTrue(response.body().contains("<main id=\"cashflow-shell-fallback\""));
         assertTrue(response.body().contains("<h1>Cashflow</h1>"));
     }
+
+    @Test
+    void servesValidRobotsInstructionsAsPlainText() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder(
+                URI.create("http://localhost:" + port + "/robots.txt")).GET().build();
+        HttpResponse<String> response =
+                HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(200, response.statusCode());
+        assertTrue(response.headers().firstValue("Content-Type").orElse("")
+                .startsWith("text/plain"));
+        assertTrue(response.body().contains("User-agent: *"));
+        assertTrue(response.body().contains("Allow: /login"));
+        assertTrue(response.body().contains("Disallow: /users"));
+    }
 }
