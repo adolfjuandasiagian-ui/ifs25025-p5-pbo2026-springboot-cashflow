@@ -1,0 +1,196 @@
+/* ===== Cashflow: gaya kustom di atas tema Lumo ===== */
+
+html {
+    --cashflow-primary: #2563EB;
+    --lumo-primary-color: #2563EB;
+    --lumo-primary-text-color: #2563EB;
+    --lumo-primary-color-50pct: rgba(37, 99, 235, 0.5);
+    --lumo-primary-color-10pct: rgba(37, 99, 235, 0.1);
+    --lumo-success-color: #16A34A;
+    --lumo-error-color: #DC2626;
+}
+
+body {
+    background: #F3F4F6;
+}
+
+/* ----- Kursor pointer pada semua kontrol interaktif ----- */
+vaadin-button,
+vaadin-menu-bar-button,
+vaadin-menu-bar-item,
+vaadin-context-menu-item,
+vaadin-tab,
+vaadin-tabs::part(tabs),
+vaadin-drawer-toggle,
+vaadin-upload-file::part(remove-button),
+vaadin-upload [slot="add-button"],
+vaadin-side-nav-item,
+vaadin-side-nav-item::part(item),
+vaadin-grid-sorter,
+vaadin-checkbox,
+vaadin-select,
+a,
+a[href],
+router-link {
+    cursor: pointer;
+}
+
+/* Kontrol yang dinonaktifkan memakai kursor default / not-allowed */
+vaadin-button[disabled],
+vaadin-menu-bar-button[disabled],
+vaadin-menu-bar-item[disabled],
+vaadin-context-menu-item[disabled],
+vaadin-tab[disabled],
+vaadin-drawer-toggle[disabled],
+vaadin-upload [slot="add-button"][disabled],
+vaadin-side-nav-item[disabled],
+vaadin-select[disabled] {
+    cursor: not-allowed;
+}
+
+/* ----- Dialog modal: header primer, footer abu-abu, tombol rata kanan ----- */
+vaadin-dialog {
+    --vaadin-dialog-title-color: #FFFFFF;
+    --lumo-header-text-color: #FFFFFF;
+}
+
+vaadin-dialog::part(header),
+vaadin-dialog-overlay::part(header) {
+    background: #2563EB;
+    color: #FFFFFF;
+}
+
+vaadin-dialog::part(title),
+vaadin-dialog-overlay::part(title),
+vaadin-dialog > [slot="title"] {
+    color: #FFFFFF;
+}
+
+vaadin-dialog::part(footer),
+vaadin-dialog-overlay::part(footer) {
+    background: #F3F4F6;
+    border-top: 1px solid #E5E7EB;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.dialog-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.22);
+    color: #FFFFFF;
+    border-radius: 999px;
+    padding: 0.1rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ----- Indikator loading global: bar bercahaya di atas layar ----- */
+.v-loading-indicator {
+    background: linear-gradient(90deg, #2563EB, #60A5FA, #2563EB) !important;
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.9), 0 0 4px #60A5FA;
+    overflow: hidden;
+}
+
+.v-loading-indicator::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+    animation: cashflow-glow 1.1s linear infinite;
+}
+
+@keyframes cashflow-glow {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+}
+
+/* ----- Layout aplikasi ----- */
+.app-title {
+    font-size: 1.25rem;
+    margin: 0 0.5rem;
+    color: var(--cashflow-primary);
+}
+
+.drawer-brand {
+    display: block;
+    padding: 1rem 1.25rem 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--cashflow-primary);
+}
+
+.user-slot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 0.75rem;
+}
+
+.user-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+    text-align: right;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.user-role {
+    font-size: 0.75rem;
+    color: #6B7280;
+}
+
+@media (max-width: 600px) {
+    .user-text {
+        display: none;
+    }
+}
+
+/* ----- Kartu & grid ----- */
+.page-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.08);
+    box-sizing: border-box;
+}
+
+.status-label {
+    color: #6B7280;
+    font-size: 0.875rem;
+}
+
+.cashflow-grid {
+    border-radius: 10px;
+}
+
+/* ----- Halaman login / registrasi ----- */
+.auth-page {
+    background: linear-gradient(135deg, #DBEAFE 0%, #F3F4F6 55%, #E0E7FF 100%);
+    overflow-y: auto;
+}
+
+.auth-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+.auth-title {
+    margin: 0;
+    color: var(--cashflow-primary);
+}
+
+.auth-subtitle {
+    margin: 0;
+    color: #6B7280;
+    font-size: 0.9rem;
+}

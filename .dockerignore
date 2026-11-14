@@ -1,0 +1,6 @@
+.git
+target
+node_modules
+uploads
+.env
+.idea

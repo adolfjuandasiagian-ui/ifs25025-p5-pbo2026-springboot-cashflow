@@ -1,0 +1,22 @@
+# Profil test: seluruh tes memakai H2 in-memory (mode PostgreSQL), bukan PostgreSQL asli.
+spring:
+  datasource:
+    url: jdbc:h2:mem:cashflow_app_test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+
+app:
+  root-username: admin
+  root-password: admin
+  upload-dir: target/test-uploads
+
+vaadin:
+  launch-browser: false
+  liveReload:
+    enabled: false
