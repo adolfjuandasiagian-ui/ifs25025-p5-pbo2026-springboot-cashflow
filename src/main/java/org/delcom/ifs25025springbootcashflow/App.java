@@ -22,6 +22,7 @@ public class App implements AppShellConfigurator {
         settings.setPageTitle("Cashflow | Catatan Keuangan Pribadi");
         settings.addMetaTag("description",
                 "Catat pemasukan dan pengeluaran, kelola transaksi, dan pantau saldo keuangan pribadi Anda.");
+        settings.addFavIcon("favicon.ico", "32x32", "image/png");
         settings.addInlineWithContents(TargetElement.BODY, Inline.Position.PREPEND,
                 "<main id=\"cashflow-shell-fallback\" aria-busy=\"true\" "
                         + "style=\"min-height:100vh;display:grid;place-content:center;"
@@ -33,8 +34,10 @@ public class App implements AppShellConfigurator {
                         + "const setConnectionStatusRole = () => {"
                         + "  const indicator = document.querySelector('vaadin-connection-indicator');"
                         + "  if (!indicator) return false;"
-                        + "  indicator.setAttribute('role', 'status');"
+                        + "  indicator.setAttribute('role', 'region');"
                         + "  indicator.setAttribute('aria-label', 'Status koneksi aplikasi');"
+                        + "  indicator.setAttribute('aria-live', 'polite');"
+                        + "  indicator.setAttribute('aria-atomic', 'true');"
                         + "  return true;"
                         + "};"
                         + "if (!setConnectionStatusRole()) {"

@@ -98,10 +98,15 @@ class AppTest {
 
         verify(settings).setPageTitle("Cashflow | Catatan Keuangan Pribadi");
         verify(settings).addMetaTag(eq("description"), contains("Catat pemasukan dan pengeluaran"));
+        verify(settings).addFavIcon("favicon.ico", "32x32", "image/png");
         verify(settings).addInlineWithContents(eq(TargetElement.BODY), eq(Inline.Position.PREPEND),
                 contains("<main id=\"cashflow-shell-fallback\""), eq(Inline.Wrapping.NONE));
         verify(settings).addInlineWithContents(eq(Inline.Position.PREPEND),
-                contains("role', 'status'"), eq(Inline.Wrapping.JAVASCRIPT));
+                contains("role', 'region'"), eq(Inline.Wrapping.JAVASCRIPT));
+        verify(settings).addInlineWithContents(eq(Inline.Position.PREPEND),
+                contains("setAttribute('aria-live', 'polite')"), eq(Inline.Wrapping.JAVASCRIPT));
+        verify(settings).addInlineWithContents(eq(Inline.Position.PREPEND),
+                contains("setAttribute('aria-atomic', 'true')"), eq(Inline.Wrapping.JAVASCRIPT));
         verify(settings).addInlineWithContents(eq(Inline.Position.APPEND),
                 contains("cashflow-shell-fallback"), eq(Inline.Wrapping.JAVASCRIPT));
     }
@@ -162,5 +167,26 @@ class AppTest {
         assertTrue(response.body().contains(
                 "https://ifs25025-p5-pbo2026-springboot-cashflow.onrender.com/register"));
         assertTrue(response.body().contains("</urlset>"));
+    }
+
+    @Test
+    void servesFaviconAtTheStandardPath() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder(
+                URI.create("http://localhost:" + port + "/favicon.ico")).GET().build();
+        HttpResponse<Void> response =
+                HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.discarding());
+
+        assertEquals(302, response.statusCode());
+        assertEquals("/icons/icon.png", response.headers().firstValue("Location").orElse(""));
+
+        HttpRequest iconRequest = HttpRequest.newBuilder(
+                URI.create("http://localhost:" + port + "/icons/icon.png")).GET().build();
+        HttpResponse<byte[]> iconResponse = HttpClient.newHttpClient().send(
+                iconRequest, HttpResponse.BodyHandlers.ofByteArray());
+
+        assertEquals(200, iconResponse.statusCode());
+        assertTrue(iconResponse.headers().firstValue("Content-Type").orElse("")
+                .startsWith("image/png"));
+        assertTrue(iconResponse.body().length > 0);
     }
 }
