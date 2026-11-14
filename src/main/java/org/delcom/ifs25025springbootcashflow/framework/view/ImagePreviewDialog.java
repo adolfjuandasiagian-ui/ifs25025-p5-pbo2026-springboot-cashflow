@@ -37,7 +37,13 @@ public class ImagePreviewDialog extends Dialog {
                 .set("height", "auto")
                 .set("border-radius", "8px")
                 .set("transition", "width 0.15s ease");
+        image.getElement().setAttribute("role", "button");
+        image.getElement().setAttribute("tabindex", "0");
+        image.getElement().setAttribute("aria-label", "Ubah zoom gambar " + title);
+        image.getElement().setAttribute("aria-pressed", "false");
         image.getElement().addEventListener("click", e -> toggleZoom());
+        image.getElement().addEventListener("keydown", e -> toggleZoom())
+                .setFilter("event.key === 'Enter' || event.key === ' '");
 
         Div viewport = new Div(image);
         viewport.getStyle()
@@ -68,6 +74,7 @@ public class ImagePreviewDialog extends Dialog {
         image.getStyle()
                 .set("width", (zoom * 100) + "%")
                 .set("cursor", zoom > 1.0 ? "zoom-out" : "zoom-in");
+        image.getElement().setAttribute("aria-pressed", String.valueOf(zoom > 1.0));
         zoomBadge.setText(String.format(Locale.US, "Zoom %.1fx", zoom));
         zoomOut.setEnabled(zoom > MIN_ZOOM);
         zoomIn.setEnabled(zoom < MAX_ZOOM);

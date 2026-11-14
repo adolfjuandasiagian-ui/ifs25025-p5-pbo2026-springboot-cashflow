@@ -9,10 +9,11 @@ pipeline {
     }
 
     environment {
-        APP_NAME   = 'ifs25025-p5-pbo2026-springboot-cashflow'
-        REGISTRY   = 'registry.example.com/ifs25025'          // ganti: alamat container registry
-        IMAGE      = "${REGISTRY}/${APP_NAME}"
-        IMAGE_TAG  = "${env.BUILD_NUMBER}"
+        APP_NAME         = 'ifs25025-p5-pbo2026-springboot-cashflow'
+        REGISTRY_HOST    = 'registry.example.com'              // ganti: hostname container registry
+        REGISTRY_NAMESPACE = 'ifs25025'                        // ganti: namespace/repository registry
+        IMAGE            = "${REGISTRY_HOST}/${REGISTRY_NAMESPACE}/${APP_NAME}"
+        IMAGE_TAG        = "${env.BUILD_NUMBER}"
         DEPLOY_HOST = 'deploy@server.example.com'              // ganti: user@host server tujuan
     }
 
@@ -59,7 +60,7 @@ pipeline {
                         usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_PASS')]) {
                     sh '''
                         docker build -t "$IMAGE:$IMAGE_TAG" -t "$IMAGE:latest" .
-                        echo "$REGISTRY_PASS" | docker login "$REGISTRY" -u "$REGISTRY_USER" --password-stdin
+                        echo "$REGISTRY_PASS" | docker login "$REGISTRY_HOST" -u "$REGISTRY_USER" --password-stdin
                         docker push "$IMAGE:$IMAGE_TAG"
                         docker push "$IMAGE:latest"
                     '''

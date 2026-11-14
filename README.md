@@ -1,13 +1,31 @@
-1. Salin LoginView.java dan RegisterView.java ke:
-   src/main/java/org/delcom/ifs25025springbootcashflow/framework/view/
-   (timpa file lama), lalu: git add . && git commit -m "Perbaiki login untuk pengujian" && git push
+# Cashflow
 
-2. Render akan deploy ulang otomatis. Tunggu Live, buka aplikasi, lalu uji ulang di Delcom.
+Aplikasi pencatat pemasukan dan pengeluaran pribadi berbasis Spring Boot, Vaadin, dan PostgreSQL. Pengguna dapat mengelola transaksi serta profilnya; admin dapat meninjau transaksi pengguna lain dalam mode baca-saja.
 
-3. Jika login MANUAL di browser juga gagal dengan username/password yang sama,
-   berarti masalahnya kredensial/database, bukan kode. Reset password admin di database
-   (contoh password baru: admin) dengan SQL berikut:
+## Menjalankan aplikasi
 
-   UPDATE users SET password_hash = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918' WHERE username = 'admin';
+1. Siapkan Java 25 dan PostgreSQL, lalu buat database `pbo2026_cashflow`.
+2. Salin `.env.example` menjadi `.env`. Atur kredensial database, `ROOT_USERNAME`, `ROOT_PASSWORD`, dan `COOKIE_SECRET`; gunakan nilai rahasia yang kuat dan jangan commit `.env`.
+3. Jalankan aplikasi:
 
-   Lalu isi Delcom dengan username: admin, password: admin.
+   ```powershell
+   .\mvnw.cmd spring-boot:run
+   ```
+
+Admin awal dibuat dari `ROOT_USERNAME` dan `ROOT_PASSWORD` jika akun tersebut belum ada.
+
+## Pengujian dan build
+
+Tes menggunakan profil `test` dan database H2:
+
+```powershell
+.\mvnw.cmd clean verify
+```
+
+Build frontend Vaadin untuk produksi:
+
+```powershell
+.\mvnw.cmd clean package -Pproduction
+```
+
+Pipeline Jenkins mencakup test dan JaCoCo, Trivy, packaging, publikasi image, serta deploy. Sesuaikan hostname/namespace registry, host deploy, dan Jenkins credentials di `Jenkinsfile` sebelum menjalankannya.

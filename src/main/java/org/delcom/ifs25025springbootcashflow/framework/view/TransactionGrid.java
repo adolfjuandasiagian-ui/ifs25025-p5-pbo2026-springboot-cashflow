@@ -115,10 +115,13 @@ public class TransactionGrid extends Grid<Transaction> {
                 .set("height", "44px")
                 .set("object-fit", "cover")
                 .set("border-radius", "6px")
-                .set("border", "1px solid #D1D5DB")
-                .set("cursor", "pointer");
-        thumbnail.getElement().addEventListener("click", e -> onProof.accept(transaction));
-        return thumbnail;
+                .set("border", "1px solid #D1D5DB");
+
+        Button proofButton = new Button(thumbnail, e -> onProof.accept(transaction));
+        proofButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        proofButton.getElement().setAttribute("aria-label", "Buka bukti transaksi " + transaction.getId());
+        proofButton.getStyle().set("padding", "0").set("min-width", "0");
+        return proofButton;
     }
 
     private HorizontalLayout createActions(Transaction transaction, Consumer<Transaction> onEdit,

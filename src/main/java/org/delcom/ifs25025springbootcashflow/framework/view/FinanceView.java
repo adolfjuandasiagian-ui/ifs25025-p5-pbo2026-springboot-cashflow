@@ -30,6 +30,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.List;
 
 /**
@@ -201,10 +202,11 @@ public class FinanceView extends VerticalLayout {
             Toasts.success(presenter.showAddSuccess(created));
             return true;
         } catch (ValidationException | EntityNotFoundException ex) {
-            if (proofPath != null) {
-                fileStorage.delete(proofPath);
-            }
+            String cleanupWarning = proofPath == null ? null : cleanupProof(proofPath);
             Toasts.error(presenter.showError(ex.getMessage()));
+            if (cleanupWarning != null) {
+                Toasts.error(presenter.showError(cleanupWarning));
+            }
         } catch (IOException ex) {
             Toasts.error(presenter.showError("Gagal menyimpan bukti: " + ex.getMessage()));
         }
@@ -239,13 +241,24 @@ public class FinanceView extends VerticalLayout {
     private void deleteTransaction(Transaction transaction) {
         try {
             Transaction removed = financeUseCase.removeTransaction(user.getId(), transaction.getId());
-            if (removed.hasProof()) {
-                fileStorage.delete(removed.getProofPath());
-            }
+            String cleanupWarning = removed.hasProof() ? cleanupProof(removed.getProofPath()) : null;
             Toasts.success(presenter.showRemoveSuccess(removed));
+            if (cleanupWarning != null) {
+                Toasts.error(presenter.showError(cleanupWarning));
+            }
             refreshAll();
         } catch (ValidationException | EntityNotFoundException ex) {
             Toasts.error(presenter.showError(ex.getMessage()));
+        }
+    }
+
+    private String cleanupProof(String proofPath) {
+        try {
+            return fileStorage.delete(proofPath)
+                    ? null
+                    : "Bukti transaksi tidak ditemukan saat pembersihan.";
+        } catch (UncheckedIOException ex) {
+            return "Gagal menghapus bukti transaksi: " + ex.getMessage();
         }
     }
 

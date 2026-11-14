@@ -31,8 +31,8 @@ server:
         http-only: true
 
 app:
-  root-username: ${ROOT_USERNAME:admin}
-  root-password: ${ROOT_PASSWORD:admin}
+  root-username: ${ROOT_USERNAME}
+  root-password: ${ROOT_PASSWORD}
   upload-dir: ${UPLOAD_DIR:uploads}
 
 vaadin:

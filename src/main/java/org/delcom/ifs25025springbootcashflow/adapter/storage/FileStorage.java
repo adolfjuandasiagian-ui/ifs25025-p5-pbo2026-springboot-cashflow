@@ -55,6 +55,7 @@ public class FileStorage {
     /**
      * Menghapus berkas berdasarkan path relatif hasil {@link #store}.
      * Mengembalikan true jika berkas ada dan terhapus; path di luar folder upload ditolak.
+     * Kegagalan I/O dilaporkan sebagai {@link UncheckedIOException}.
      */
     public boolean delete(String relativePath) {
         if (relativePath == null || !relativePath.startsWith(PUBLIC_PREFIX)) {
@@ -67,7 +68,7 @@ public class FileStorage {
         try {
             return Files.deleteIfExists(target);
         } catch (IOException e) {
-            return false;
+            throw new UncheckedIOException("Gagal menghapus berkas unggahan: " + relativePath, e);
         }
     }
 

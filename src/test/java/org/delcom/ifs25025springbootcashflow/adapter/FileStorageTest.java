@@ -57,13 +57,13 @@ class FileStorageTest {
     }
 
     @Test
-    void deleteReturnsFalseWhenFileCannotBeRemoved() throws Exception {
+    void deleteReportsIoFailureWhenFileCannotBeRemoved() throws Exception {
         Path dir = newDir();
         FileStorage storage = new FileStorage(dir.toString());
         Path folder = Files.createDirectory(storage.getRoot().resolve("isi"));
         Files.write(folder.resolve("x.txt"), PNG);
 
-        assertFalse(storage.delete("uploads/isi"));
+        assertThrows(UncheckedIOException.class, () -> storage.delete("uploads/isi"));
     }
 
     @Test

@@ -26,6 +26,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 /** Pengaturan akun: nama lengkap, password, dan foto profil. */
 @Route(value = "profile", layout = MainLayout.class)
@@ -117,6 +118,7 @@ public class ProfileView extends VerticalLayout {
         progress.setVisible(true);
         saveButton.setEnabled(false);
         String newPhoto = null;
+        String cleanupWarning = null;
         try {
             String oldPhoto = user.getPhotoPath();
             if (photoUpload.hasFile()) {
@@ -126,21 +128,35 @@ public class ProfileView extends VerticalLayout {
             if (newPhoto != null) {
                 user = userUseCase.updatePhoto(user.getId(), newPhoto);
                 if (oldPhoto != null) {
-                    fileStorage.delete(oldPhoto);
+                    cleanupWarning = deletePhoto(oldPhoto);
                 }
             }
             resetForm();
             Toasts.success("Profil berhasil diperbarui.");
-        } catch (ValidationException | EntityNotFoundException ex) {
-            if (newPhoto != null) {
-                fileStorage.delete(newPhoto);
+            if (cleanupWarning != null) {
+                Toasts.error(cleanupWarning);
             }
+        } catch (ValidationException | EntityNotFoundException ex) {
+            cleanupWarning = newPhoto == null ? null : deletePhoto(newPhoto);
             Toasts.error("[!] " + ex.getMessage());
+            if (cleanupWarning != null) {
+                Toasts.error(cleanupWarning);
+            }
         } catch (IOException ex) {
             Toasts.error("[!] Gagal menyimpan foto: " + ex.getMessage());
         } finally {
             progress.setVisible(false);
             saveButton.setEnabled(true);
+        }
+    }
+
+    private String deletePhoto(String path) {
+        try {
+            return fileStorage.delete(path)
+                    ? null
+                    : "[!] Foto tidak ditemukan saat pembersihan.";
+        } catch (UncheckedIOException ex) {
+            return "[!] Gagal menghapus foto: " + ex.getMessage();
         }
     }
 
