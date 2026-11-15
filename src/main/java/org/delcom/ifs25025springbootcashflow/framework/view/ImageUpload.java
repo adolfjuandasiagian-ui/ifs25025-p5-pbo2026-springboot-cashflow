@@ -19,8 +19,8 @@ public final class ImageUpload {
         }));
         upload.setMaxFiles(1);
         upload.setMaxFileSize(MAX_BYTES);
-        upload.setAcceptedFileTypes("image/png", "image/jpeg", "image/gif", "image/webp",
-                ".png", ".jpg", ".jpeg", ".gif", ".webp");
+        upload.setAcceptedMimeTypes("image/png", "image/jpeg", "image/gif", "image/webp");
+        upload.setAcceptedFileExtensions(".png", ".jpg", ".jpeg", ".gif", ".webp");
         upload.addFileRemovedListener(e -> clear());
         upload.addFileRejectedListener(e -> Toasts.error("[!] " + e.getErrorMessage()));
     }
