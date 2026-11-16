@@ -118,6 +118,8 @@ class AppTest {
                 contains("Pengumuman aplikasi"), eq(Inline.Wrapping.JAVASCRIPT));
         verify(settings).addInlineWithContents(eq(Inline.Position.APPEND),
                 contains("cashflow-shell-fallback"), eq(Inline.Wrapping.JAVASCRIPT));
+        verify(settings).addInlineWithContents(eq(Inline.Position.APPEND),
+                contains("outlet.setAttribute('role', 'main')"), eq(Inline.Wrapping.JAVASCRIPT));
     }
 
     @Test

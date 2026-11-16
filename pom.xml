@@ -240,6 +240,10 @@
                         <groupId>com.vaadin</groupId>
                         <artifactId>vaadin-maven-plugin</artifactId>
                         <version>${vaadin.version}</version>
+                        <configuration>
+                            <cleanFrontendFiles>true</cleanFrontendFiles>
+                            <forceProductionBuild>true</forceProductionBuild>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>frontend</id>

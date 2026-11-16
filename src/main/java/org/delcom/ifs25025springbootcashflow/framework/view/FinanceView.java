@@ -69,7 +69,6 @@ public class FinanceView extends VerticalLayout {
                 t -> openFormDialog(t.getType(), t), this::openDeleteDialog);
         grid.setEmptyStateComponent(emptyState);
 
-        getElement().setAttribute("role", "main");
         setPadding(true);
         setSpacing(true);
 

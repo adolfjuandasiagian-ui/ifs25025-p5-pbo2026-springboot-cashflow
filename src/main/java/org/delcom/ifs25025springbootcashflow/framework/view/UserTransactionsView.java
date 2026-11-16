@@ -61,7 +61,6 @@ public class UserTransactionsView extends VerticalLayout implements BeforeEnterO
         grid = new TransactionGrid(presenter, this::openProofDialog, null, null);
         grid.setEmptyStateComponent(emptyState);
 
-        getElement().setAttribute("role", "main");
         setPadding(true);
         setSpacing(true);
 
