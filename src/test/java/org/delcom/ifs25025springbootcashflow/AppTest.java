@@ -18,15 +18,19 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.Duration;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.UUID;
 
 import com.vaadin.flow.component.page.Inline;
 import com.vaadin.flow.component.page.TargetElement;
 import com.vaadin.flow.server.AppShellSettings;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -190,5 +194,27 @@ class AppTest {
         assertTrue(iconResponse.headers().firstValue("Content-Type").orElse("")
                 .startsWith("image/png"));
         assertTrue(iconResponse.body().length > 0);
+    }
+
+    @Test
+    void servesUploadedImagesPublicly() throws IOException, InterruptedException {
+        String fileName = "public-upload-" + UUID.randomUUID() + ".png";
+        byte[] content = "public-upload-test".getBytes(StandardCharsets.UTF_8);
+        var file = fileStorage.getRoot().resolve(fileName);
+        Files.write(file, content);
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder(
+                    URI.create("http://localhost:" + port + "/uploads/" + fileName)).GET().build();
+            HttpResponse<byte[]> response = HttpClient.newHttpClient().send(
+                    request, HttpResponse.BodyHandlers.ofByteArray());
+
+            assertEquals(200, response.statusCode());
+            assertTrue(response.headers().firstValue("Content-Type").orElse("")
+                    .startsWith("image/png"));
+            assertArrayEquals(content, response.body());
+        } finally {
+            Files.deleteIfExists(file);
+        }
     }
 }
