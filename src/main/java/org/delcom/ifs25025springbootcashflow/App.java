@@ -34,10 +34,11 @@ public class App implements AppShellConfigurator {
             }
         }
         settings.addInlineWithContents(TargetElement.BODY, Inline.Position.PREPEND,
-                "<main id=\"cashflow-shell-fallback\" aria-busy=\"true\" "
+                "<div id=\"cashflow-shell-fallback\" role=\"region\" "
+                        + "aria-label=\"Memuat aplikasi Cashflow\" aria-busy=\"true\" "
                         + "style=\"min-height:100vh;display:grid;place-content:center;"
                         + "text-align:center;padding:1rem\">"
-                        + "<h1>Cashflow</h1><p aria-live=\"polite\">Memuat catatan keuangan...</p></main>",
+                        + "<h1>Cashflow</h1><p aria-live=\"polite\">Memuat catatan keuangan...</p></div>",
                 Inline.Wrapping.NONE);
         settings.addInlineWithContents(Inline.Position.PREPEND,
                 "document.documentElement.lang = 'id';"

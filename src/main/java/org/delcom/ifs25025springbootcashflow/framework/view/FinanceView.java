@@ -91,13 +91,15 @@ public class FinanceView extends VerticalLayout {
     // ------------------------------------------------------------------ toolbar
 
     private void configureToolbar() {
-        searchField.setPlaceholder("Cari keterangan...");
+        searchField.setLabel("Cari keterangan");
+        searchField.setPlaceholder("Masukkan kata kunci...");
         searchField.setPrefixComponent(VaadinIcon.SEARCH.create());
         searchField.setClearButtonVisible(true);
         searchField.setValueChangeMode(ValueChangeMode.LAZY);
         searchField.addValueChangeListener(e -> applyFilter());
 
-        sortSelect.setPlaceholder("Urutkan...");
+        sortSelect.setLabel("Urutkan transaksi");
+        sortSelect.setPlaceholder("Pilih pengurutan...");
         sortSelect.setEmptySelectionAllowed(true);
         sortSelect.setItems(SortOption.values());
         sortSelect.setItemLabelGenerator(presenter::formatSortOption);

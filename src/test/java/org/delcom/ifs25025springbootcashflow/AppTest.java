@@ -107,7 +107,11 @@ class AppTest {
         verify(settings).addMetaTag(eq("description"), contains("Catat pemasukan dan pengeluaran"));
         verify(settings).addFavIcon("favicon.ico", "32x32", "image/png");
         verify(settings).addInlineWithContents(eq(TargetElement.BODY), eq(Inline.Position.PREPEND),
-                contains("<main id=\"cashflow-shell-fallback\""), eq(Inline.Wrapping.NONE));
+                contains("<div id=\"cashflow-shell-fallback\" role=\"region\""),
+                eq(Inline.Wrapping.NONE));
+        verify(settings).addInlineWithContents(eq(TargetElement.BODY), eq(Inline.Position.PREPEND),
+                contains("aria-label=\"Memuat aplikasi Cashflow\""),
+                eq(Inline.Wrapping.NONE));
         verify(settings).addInlineWithContents(eq(Inline.Position.PREPEND),
                 contains("role', 'region'"), eq(Inline.Wrapping.JAVASCRIPT));
         verify(settings).addInlineWithContents(eq(Inline.Position.PREPEND),
@@ -171,7 +175,8 @@ class AppTest {
         } while (System.nanoTime() < deadline);
 
         assertEquals(200, response.statusCode());
-        assertTrue(response.body().contains("<main id=\"cashflow-shell-fallback\""));
+        assertTrue(response.body().contains(
+                "<div id=\"cashflow-shell-fallback\" role=\"region\""));
         assertTrue(response.body().contains("<h1>Cashflow</h1>"));
         assertTrue(response.body().contains(
                 "https://ifs25025-p5-pbo2026-springboot-cashflow.onrender.com/login"));
@@ -268,5 +273,21 @@ class AppTest {
 
         assertEquals(200, response.statusCode());
         assertEquals("gzip", response.headers().firstValue("Content-Encoding").orElse(""));
+    }
+
+    @Test
+    void cachesFingerprintVersionedVaadinAssetsImmutably() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder(
+                URI.create("http://localhost:" + port
+                        + "/VAADIN/build/cache-test-Abcdef12.js"))
+                .GET()
+                .build();
+        HttpResponse<Void> response = HttpClient.newHttpClient().send(
+                request, HttpResponse.BodyHandlers.discarding());
+
+        assertTrue(response.headers().firstValue("Cache-Control").orElse("")
+                .contains("max-age=31536000"));
+        assertTrue(response.headers().firstValue("Cache-Control").orElse("")
+                .contains("immutable"));
     }
 }

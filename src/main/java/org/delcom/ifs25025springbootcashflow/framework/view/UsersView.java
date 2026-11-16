@@ -46,6 +46,7 @@ public class UsersView extends VerticalLayout implements BeforeEnterObserver {
     }
 
     private void configureGrid() {
+        grid.getElement().setAttribute("aria-label", "Daftar pengguna");
         GridStyles.apply(grid);
 
         grid.addColumn(User::getId)

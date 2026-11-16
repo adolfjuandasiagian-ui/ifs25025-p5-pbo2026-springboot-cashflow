@@ -26,6 +26,7 @@ public class TransactionGrid extends Grid<Transaction> {
     public TransactionGrid(FinancePresenter presenter, Consumer<Transaction> onProof,
                            Consumer<Transaction> onEdit, Consumer<Transaction> onDelete) {
         this.presenter = presenter;
+        getElement().setAttribute("aria-label", "Daftar transaksi");
         GridStyles.apply(this);
 
         addColumn(Transaction::getId)
