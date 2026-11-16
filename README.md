@@ -14,6 +14,15 @@ Aplikasi pencatat pemasukan dan pengeluaran pribadi berbasis Spring Boot, Vaadin
 
 Admin awal dibuat dari `ROOT_USERNAME` dan `ROOT_PASSWORD` jika akun tersebut belum ada.
 
+## Rute dan hak akses
+
+| Rute | Hak akses | Perilaku |
+| --- | --- | --- |
+| `/login`, `/register` | Publik | Pengguna yang sudah login diarahkan ke `/`. |
+| `/uploads/**`, `/icons/**`, `/styles.css` | Publik | Berkas gambar unggahan dan aset frontend. |
+| `/`, `/profile` | USER dan ADMIN | Wajib login; sesi kosong diarahkan ke `/login`. |
+| `/users`, `/user-transactions` | ADMIN | USER diarahkan ke `/`; detail transaksi bersifat baca-saja. |
+
 ## Pengujian dan build
 
 Tes menggunakan profil `test` dan database H2:

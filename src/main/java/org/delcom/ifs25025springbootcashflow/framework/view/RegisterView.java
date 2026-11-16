@@ -105,7 +105,7 @@ public class RegisterView extends VerticalLayout implements BeforeEnterObserver 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         if (AuthSession.currentUser(userRepository) != null) {
-            event.forwardTo(FinanceView.class);
+            event.rerouteTo(FinanceView.class);
         }
     }
 }

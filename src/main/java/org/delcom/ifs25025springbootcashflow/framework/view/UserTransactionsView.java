@@ -90,19 +90,19 @@ public class UserTransactionsView extends VerticalLayout implements BeforeEnterO
     public void beforeEnter(BeforeEnterEvent event) {
         User current = AuthSession.currentUser(userRepository);
         if (current == null || !current.isAdmin()) {
-            event.forwardTo(FinanceView.class);
+            event.rerouteTo(FinanceView.class);
             return;
         }
         Optional<Integer> id = event.getLocation().getQueryParameters()
                 .getSingleParameter("userId").flatMap(UserTransactionsView::parseId);
         if (id.isEmpty()) {
-            event.forwardTo(UsersView.class);
+            event.rerouteTo(UsersView.class);
             return;
         }
         try {
             target = userUseCase.getUser(id.get());
         } catch (EntityNotFoundException ex) {
-            event.forwardTo(UsersView.class);
+            event.rerouteTo(UsersView.class);
         }
     }
 
