@@ -105,6 +105,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         if (AuthSession.currentUser(userRepository) != null) {
+            event.getUI().getPage().setLocation("/");
             event.rerouteTo(FinanceView.class);
         }
     }

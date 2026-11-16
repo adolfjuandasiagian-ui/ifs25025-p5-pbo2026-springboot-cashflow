@@ -96,6 +96,7 @@ public class UsersView extends VerticalLayout implements BeforeEnterObserver {
     public void beforeEnter(BeforeEnterEvent event) {
         User current = AuthSession.currentUser(userRepository);
         if (current == null || !current.isAdmin()) {
+            event.getUI().getPage().setLocation("/");
             event.rerouteTo(FinanceView.class);
         }
     }

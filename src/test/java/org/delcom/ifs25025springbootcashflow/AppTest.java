@@ -29,6 +29,7 @@ import java.util.UUID;
 import com.vaadin.flow.component.page.Inline;
 import com.vaadin.flow.component.page.TargetElement;
 import com.vaadin.flow.server.AppShellSettings;
+import com.vaadin.flow.server.VaadinRequest;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,7 +40,9 @@ import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /** Smoke test: konteks Spring (profil test, H2) naik dan seluruh bean Clean Architecture terpasang. */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -118,6 +121,36 @@ class AppTest {
     }
 
     @Test
+    void configuresCanonicalMetadataForPublicRoutes() {
+        for (String path : new String[]{"/login", "/register"}) {
+            AppShellSettings settings = mock(AppShellSettings.class);
+            VaadinRequest request = mock(VaadinRequest.class);
+            when(settings.getRequest()).thenReturn(request);
+            when(request.getPathInfo()).thenReturn(path);
+
+            new App().configurePage(settings);
+
+            verify(settings).addLink("canonical",
+                    "https://ifs25025-p5-pbo2026-springboot-cashflow.onrender.com" + path);
+            verify(settings).addMetaTag("robots", "index,follow");
+        }
+    }
+
+    @Test
+    void doesNotIndexProtectedRoutes() {
+        AppShellSettings settings = mock(AppShellSettings.class);
+        VaadinRequest request = mock(VaadinRequest.class);
+        when(settings.getRequest()).thenReturn(request);
+        when(request.getPathInfo()).thenReturn("/profile");
+
+        new App().configurePage(settings);
+
+        verify(settings, never()).addLink("canonical",
+                "https://ifs25025-p5-pbo2026-springboot-cashflow.onrender.com/profile");
+        verify(settings, never()).addMetaTag("robots", "index,follow");
+    }
+
+    @Test
     void servesAccessibleFallbackInInitialPageShell() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder(
                 URI.create("http://localhost:" + port + "/login"))
@@ -138,6 +171,9 @@ class AppTest {
         assertEquals(200, response.statusCode());
         assertTrue(response.body().contains("<main id=\"cashflow-shell-fallback\""));
         assertTrue(response.body().contains("<h1>Cashflow</h1>"));
+        assertTrue(response.body().contains(
+                "https://ifs25025-p5-pbo2026-springboot-cashflow.onrender.com/login"));
+        assertTrue(response.body().contains("name=\"robots\" content=\"index,follow\""));
     }
 
     @Test
@@ -216,5 +252,19 @@ class AppTest {
         } finally {
             Files.deleteIfExists(file);
         }
+    }
+
+    @Test
+    void compressesStaticStylesheetResponses() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder(
+                URI.create("http://localhost:" + port + "/styles.css"))
+                .header("Accept-Encoding", "gzip")
+                .GET()
+                .build();
+        HttpResponse<Void> response = HttpClient.newHttpClient().send(
+                request, HttpResponse.BodyHandlers.discarding());
+
+        assertEquals(200, response.statusCode());
+        assertEquals("gzip", response.headers().firstValue("Content-Encoding").orElse(""));
     }
 }

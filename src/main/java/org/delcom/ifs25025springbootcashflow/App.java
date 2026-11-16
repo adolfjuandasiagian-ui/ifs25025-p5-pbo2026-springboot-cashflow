@@ -17,12 +17,22 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @PWA(name = "Cashflow", shortName = "Cashflow", iconPath = "icons/icon.png")
 public class App implements AppShellConfigurator {
 
+    private static final String PUBLIC_BASE_URL =
+            "https://ifs25025-p5-pbo2026-springboot-cashflow.onrender.com";
+
     @Override
     public void configurePage(AppShellSettings settings) {
         settings.setPageTitle("Cashflow | Catatan Keuangan Pribadi");
         settings.addMetaTag("description",
                 "Catat pemasukan dan pengeluaran, kelola transaksi, dan pantau saldo keuangan pribadi Anda.");
         settings.addFavIcon("favicon.ico", "32x32", "image/png");
+        if (settings.getRequest() != null) {
+            String path = settings.getRequest().getPathInfo();
+            if ("/login".equals(path) || "/register".equals(path)) {
+                settings.addLink("canonical", PUBLIC_BASE_URL + path);
+                settings.addMetaTag("robots", "index,follow");
+            }
+        }
         settings.addInlineWithContents(TargetElement.BODY, Inline.Position.PREPEND,
                 "<main id=\"cashflow-shell-fallback\" aria-busy=\"true\" "
                         + "style=\"min-height:100vh;display:grid;place-content:center;"

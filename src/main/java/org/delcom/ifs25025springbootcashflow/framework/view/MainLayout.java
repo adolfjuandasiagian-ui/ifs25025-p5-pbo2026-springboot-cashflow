@@ -53,6 +53,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
     public void beforeEnter(BeforeEnterEvent event) {
         User user = AuthSession.currentUser(userRepository);
         if (user == null) {
+            event.getUI().getPage().setLocation("/login");
             event.rerouteTo(LoginView.class);
             return;
         }
